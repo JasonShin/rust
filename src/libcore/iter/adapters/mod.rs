@@ -1202,7 +1202,10 @@ impl<I: Iterator> Iterator for Peekable<I> {
         };
         let (lo, hi) = self.iter.size_hint();
         let lo = lo.saturating_add(peek_len);
-        let hi = hi.and_then(|x| x.checked_add(peek_len));
+        let hi = match hi {
+            Some(x) => x.checked_add(peek_len),
+            None => None,
+        };
         (lo, hi)
     }
 
